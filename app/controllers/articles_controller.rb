@@ -1,40 +1,51 @@
 class ArticlesController < ApplicationController
 
+  before_action :set_article, only: [:show, :edit, :update, :destroy]
 
-  # before_action :set_restaurant, only: [:show, :edit, :update, :destroy]
-  
-  # def index
-  #   # Find all restaurants -> Restaurant.all
-  #   # Store in an instance variable
-  #   @restaurants = Restaurant.all
-  # end
+  def index
+    @articles = Article.all
+  end
 
-  # def show
-  # end
+  def show
+  end
 
-  # def new
-  #   @restaurant = Restaurant.new
-  # end
+  def new
+    @article = Article.new
+  end
 
-  # def create
-  #   @restaurant = Restaurant.new(restaurant_params)
-  #   @restaurant.save
-  #   redirect_to restaurants_path
-  # end
+  def edit
+  end
 
-  # def edit
-  # end
+  def create
+    @article = Article.new(article_params)
 
-  # def update
-  #   @restaurant.update(restaurant_params)
-  #   redirect_to restaurant_path(@restaurant)
-  # end
+    if @article.save
+      redirect_to @article
+    else
+      render :new
+    end
+  end
 
-  # def destroy
-  #   # Find the restaurant -> Restaurant.find
-  #   # Destroy
-  #   @restaurant.destroy
-  #   # redirect to the index
-  #   redirect_to restaurants_path, status: :see_other
-  # end
+  def update
+    if @article.update(article_params)
+      redirect_to @article
+    else
+      render :edit
+    end
+  end
+
+  def destroy
+    @article.destroy
+    redirect_to articles_url, status: :see_other
+  end
+
+  private
+
+  def set_article
+    @article = Article.find(params[:id])
+  end
+
+  def article_params
+    params.require(:article).permit(:title, :content)
+  end
 end
